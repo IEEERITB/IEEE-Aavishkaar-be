@@ -4,7 +4,7 @@ const { connectDatabase } = require("./database/connect_mongo");
 require("dotenv").config(); //dotenv is used to load environment variables from a .env file into process.env
 
 const app = express();
-const port = 3000;
+const port = 8000;
 
 app.use(cors()); //cors temperory set to all origns for development
 app.use(express.json());
