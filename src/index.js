@@ -9,6 +9,10 @@ const port = 8000;
 app.use(cors()); //cors temperory set to all origns for development
 app.use(express.json());
 
+//main routes
+const teamRoutes = require('./routes/teamRoutes');
+const eventRoutes= require('./routes/eventRoutes');
+
 //replace the "" with the mongo uri or make a .env file and add the uri there
 connectDatabase(process.env.MONGO_URI ? process.env.MONGO_URI : "");
 
@@ -17,7 +21,9 @@ app.get("/", (req, res) => {
   res.json({ message: "Aaavishkar Backend" }).status(200);
 });
 
+//APIs
+app.use('/aavishkar/team', teamRoutes);
+app.use('/aavishkar/events',eventRoutes);
 app.listen(port, () => {
   console.log(`Server running at port: ${port}`);
 });
-
