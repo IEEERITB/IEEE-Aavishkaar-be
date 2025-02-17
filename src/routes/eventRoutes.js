@@ -1,4 +1,5 @@
 const express = require('express');
+const Team = require('../database/schemas/Team');
 const Event = require('../database/schemas/Event');
 const router = express.Router();
 

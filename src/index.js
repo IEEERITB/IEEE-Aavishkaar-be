@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { connectDatabase } = require("./database/connect_mongo");
-require("dotenv-flow").config(); //dotenv is used to load environment variables from a .env file into process.env
+require("dotenv-flow").config({ path: "../" });//dotenv is used to load environment variables from a .env file into process.env
 
 const app = express();
 const port = 8000;
@@ -22,6 +22,7 @@ app.get("/", (req, res) => {
 
 //APIs
 app.use('/aavishkar/events',eventRoutes);
+
 app.listen(port, () => {
   console.log(`Server running at port: ${port}`);
 });
