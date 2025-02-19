@@ -1,5 +1,4 @@
 const express = require('express');
-const Team = require('../database/schemas/Team');
 const Event = require('../database/schemas/Event');
 const router = express.Router();
 
@@ -7,11 +6,7 @@ const router = express.Router();
 router.get('/event/:eventId', async (req, res) => {
   try {
     const { eventId } = req.params;
-    const event = await Event.findById(eventId).populate({
-      path: 'registeredTeams.teamId',
-      select: 'teamName leader members', 
-      model: 'Team', 
-    });
+    const event = await Event.findById(eventId);
 
     if (!event) {
       return res.status(404).json({ message: 'Event not found' });
@@ -20,16 +15,15 @@ router.get('/event/:eventId', async (req, res) => {
     res.json({
       eventName: event.name,
       eventDescription: event.description,
-      eventDate: event.date,
-      eventTime: event.time,
+      eventTimeline: event.timeline,
       eventVenue: event.venue,
-      eventCategory: event.category,
+      eventTheme: event.theme,
       maxParticipantsPerTeam: event.maxParticipantsPerTeam,
-      registeredTeams: event.registeredTeams.map((teamRegistration) => ({
-        teamName: teamRegistration.teamId ? teamRegistration.teamId.teamName : 'Unknown',
-        leader: teamRegistration.teamId ? teamRegistration.teamId.leader : 'Unknown',
-        members: teamRegistration.members, 
-      })),
+      prizes: event.prizes,
+      registrationFees: event.registrationFees,
+      rules: event.rules,
+      coordinators: event.coordinators,
+      eventFlow: event.eventFlow
     });
   } catch (error) {
     console.error('Error fetching event by ID:', error);
@@ -37,62 +31,32 @@ router.get('/event/:eventId', async (req, res) => {
   }
 });
 
+
 //this returns only event details (for now)
 router.get('/events', async (req, res) => {
   try {
-    const events = await Event.find().select('-registeredTeams'); 
-
-    if (events.length === 0) {
+    const limit = Number(req.query.limit) || 10;
+    const offset = Number(req.query.offset) || 0;
+    const events = await Event.find().skip(offset).limit(limit);
+      if (events.length === 0) {
       return res.json({ message: 'No events found' });
     }
+
     const allEventDetails = events.map((event) => ({
       eventName: event.name,
       eventDescription: event.description,
-      eventDate: event.date,
-      eventTime: event.time,
-      eventVenue: event.venue,
-      eventCategory: event.category,
+      eventTimeline: event.timeline,
+      eventTheme: event.theme,
       maxParticipantsPerTeam: event.maxParticipantsPerTeam,
+      registrationFees: event.registrationFees
     }));
+
     res.json(allEventDetails);
   } catch (error) {
     console.error('Error fetching all events:', error);
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
 });
-router.get('/event/:eventId/teams', async (req, res) => {
-  try {
-    const { eventId } = req.params;
-    const event = await Event.findById(eventId).populate({
-      path: 'registeredTeams.teamId', 
-      select: 'teamName leader members', 
-      model: 'Team',
-    });
 
-    if (!event) {
-      return res.status(404).json({ message: 'Event not found' });
-    }
-    if (event.registeredTeams.length === 0) {
-      return res.json({ message: 'No teams registered for this event' });
-    }
-
-    
-    const teams = event.registeredTeams.map((teamRegistration) => {
-      return {
-        teamName: teamRegistration.teamId ? teamRegistration.teamId.teamName : 'Unknown', 
-        leader: teamRegistration.teamId ? teamRegistration.teamId.leader : 'Unknown', 
-        members: teamRegistration.members, 
-      };
-    });
-    res.json({
-    eventName: event.name,
-    eventDate: event.date,
-    teams: teams, 
-    });
-  } catch (error) {
-    console.error('Error fetching event teams:', error);
-    res.status(500).json({ message: 'Server Error', error: error.message });
-  }
-});
 
 module.exports = router;
