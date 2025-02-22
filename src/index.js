@@ -9,6 +9,8 @@ const port = 8000;
 app.use(cors()); //cors temperory set to all origns for development
 app.use(express.json());
 
+app.use("/api/auth",require("./authorization/Routes/Auth"));
+
 //replace the "" with the mongo uri or make a .env file and add the uri there
 connectDatabase(process.env.MONGO_URI ? process.env.MONGO_URI : "");
 
