@@ -4,27 +4,25 @@ const teamSchema = new mongoose.Schema({
   teamName: {
     type: String,
     required: true,
-    unique: true,
   },
   leader: {
     name: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true, },
     contactNumber: { type: String, required: true },
-    usn: { type: String, required: true, unique: true },
+    usn: { type: String, required: false, },
   },
   members: [
     {
       name: { type: String, required: true },
-      usn: { type: String, required: true, unique: true },
+      usn: { type: String, required: false,  },
     }
   ],
-  events: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Event',
-      required: true,
-    }
-  ],
+  
+  event:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:'Event',
+    required:true,
+  },
   registeredAt: {
     type: Date,
     default: Date.now,

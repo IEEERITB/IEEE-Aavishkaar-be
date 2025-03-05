@@ -1,30 +1,58 @@
 const express = require("express");
 const cors = require("cors");
 const { connectDatabase } = require("./database/connect_mongo");
-require("dotenv-flow").config(); //dotenv is used to load environment variables from a .env file into process.env
+require("dotenv-flow").config();
 
 const app = express();
-const port = 8000;
+const port = process.env.PORT || 8000;
 
-app.use(cors()); //cors temperory set to all origns for development
+// Middleware
+app.use(cors());
 app.use(express.json());
 
-//main routes
-const teamRoutes = require('./routes/teamRoutes');
-const eventRoutes= require('./routes/eventRoutes');
+// Ensure MONGO_URI is provided
+if (!process.env.MONGO_URI) {
+  console.error("MONGO_URI is not defined. Please check your .env file.");
+  process.exit(1);
+}
 
-//replace the "" with the mongo uri or make a .env file and add the uri there
-connectDatabase(process.env.MONGO_URI ? process.env.MONGO_URI : "");
+// Connect to MongoDB
+connectDatabase(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch((err) => {
+    console.error("MongoDB Connection Error:", err);
+    process.exit(1);
+  });
 
-//default route, use express router for other routes
+// Default route
 app.get("/", (req, res) => {
-  res.json({ message: "Aaavishkar Backend" }).status(200);
+  res.status(200).json({ message: "Aavishkaar Backend" });
 });
 
-//APIs
-app.use('/aavishkar/team', teamRoutes);
-app.use('/aavishkar/events',eventRoutes);
+// Import and register routes
+const eventRoutes = require("./routes/eventRoutes.js");
+const teamRoutes = require("./routes/teamRoutes.js");
+
+console.log("Before registering routes...");
+app.use("/aavishkaar", eventRoutes);
+app.use("/aavishkaar/teams", teamRoutes);
+
+// Print registered routes
+console.log("Registered Routes:");
+app._router.stack.forEach((middleware) => {
+  if (middleware.route) {
+    console.log(`${Object.keys(middleware.route.methods).join(", ").toUpperCase()} ${middleware.route.path}`);
+  } else if (middleware.name === "router") {
+    middleware.handle.stack.forEach((subMiddleware) => {
+      if (subMiddleware.route) {
+        console.log(`${Object.keys(subMiddleware.route.methods).join(", ").toUpperCase()} /aavishkaar${subMiddleware.route.path}`);
+      }
+    });
+  }
+});
+
+
+// Start the server
 app.listen(port, () => {
-  console.log(`Server running at port: ${port}`);
+  console.log(`Server running at http://localhost:${port}`);
 });
-

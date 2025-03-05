@@ -6,25 +6,37 @@ const router = express.Router();
 //team registration
 router.post('/register', async (req, res) => {
   try {
-    const { teamName, leader, members, events } = req.body;
+    const { teamName, leader, members, event } = req.body;
+    console.log(teamName);
+    const eventExists = await Event.findById( event);
+    if (!eventExists) {
+      return res.status(400).json({ message: ' event does not exist' });
+    }
 
-    const eventExists = await Event.find({ _id: { $in: events } });
-    if (eventExists.length !== events.length) {
-      return res.status(400).json({ message: 'One or more events do not exist' });
+    // checks if registering twice
+    const leaderExist=await Team.findOne({
+      'leader.email':leader.email,
+      event:event,
+    });
+
+    if(leaderExist){
+      return res.status(400).json({message:'Leader exist for the event '});
     }
 
     const newTeam = new Team({
       teamName,
       leader,
       members,
-      events,
+      event,
     });
 
     const savedTeam = await newTeam.save();
-    await Event.updateMany(
-      { _id: { $in: events } },
-      { $push: { registeredTeams: savedTeam._id } }
-    );
+
+    // await Event.findByIdAndUpdate(
+    //   event,
+    //   { $push: { registeredTeams: savedTeam._id } }
+    // );
+    
 
     res.status(201).json({ message: 'Team registered successfully', team: savedTeam });
   } catch (error) {

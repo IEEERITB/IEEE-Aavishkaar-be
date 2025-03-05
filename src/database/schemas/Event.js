@@ -1,23 +1,29 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const eventSchema = new mongoose.Schema({
-  name: { type: String, required: true, unique: true },
+const eventSchema = new Schema({
+  name: { type: String, required: true },
   description: { type: String, required: true },
-  date: { type: Date, required: true },
-  time: { type: String, required: true },
+  timeline: {
+    dates: { type: [Date], required: true }
+  },
   venue: { type: String, required: true },
-  minParticipants:{type:Number,required:true},
-  maxParticipants: { type: Number, required: true },
-
-  
-  // Usefull to get all the teams registered for the event
-  registeredTeams: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Team',
-    }
-  ],
+  theme: { type: String, required: true },
+  maxParticipantsPerTeam: { type: Number, required: true },
+  prizes: [{
+    position: { type: Number, required: true },
+    amount: { type: Number, required: true }
+  }],
+  registrationFees: {
+    standard: { type: Number, required: true },
+    ieeeMember: { type: Number, required: true }
+  },
+  rules: { type: [String], required: true },
+  coordinators: [{
+    name: { type: String, required: true },
+    contactNumber: { type: String, required: true }
+  }],
+  eventFlow: { type: [String] }
 });
 
-const Event = mongoose.model('Event', eventSchema);
-module.exports = Event;
+module.exports = mongoose.model('Event', eventSchema);
