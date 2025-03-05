@@ -1,8 +1,8 @@
 // Code to connect to MongoDB database
 const mongoose = require("mongoose");
-
+const Event = require("./schemas/Event");
 const connectionOptions = {
-  dbName: process.env.NODE_ENV === "production" ? "aavishkaar" : "test",
+  dbName: process.env.NODE_ENV === "production" ? "aavishkar25" : "test",
 };
 
 //The uri is the connection string that is used to connect to the MongoDB database.
@@ -13,8 +13,10 @@ async function connectDatabase(uri) {
   }
   try {
     //create connection with mongodb
+    // console.log(uri);
     await mongoose.connect(uri, connectionOptions);
     console.log("Connected to the database successfully");
+    // console.log(mongoose.connection.name);
   } catch (error) {
     console.error("Error connecting to the database: ", error);
   }
