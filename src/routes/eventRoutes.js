@@ -69,5 +69,29 @@ router.get('/events', async (req, res) => {
   }
 });
 
+router.get('/getFeaturedEvents', async (req, res) => {
+  try {
+    const featuredEvents = await Event.find({ organiser: 'SB' });
+
+    if (featuredEvents.length === 0) {
+      return res.status(404).json({ message: 'No featured events found' });
+    }
+
+    const featuredEventDetails = featuredEvents.map((event) => ({
+      eventName: event.name,
+      eventDescription: event.description,
+      eventTimeline: event.timeline,
+      eventTheme: event.theme,
+      maxParticipantsPerTeam: event.maxParticipantsPerTeam,
+      registrationFees: event.registrationFees
+    }));
+
+    res.json(featuredEventDetails);
+  } catch (error) {
+    console.error('Error fetching featured events:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+});
+
 
 module.exports = router;
