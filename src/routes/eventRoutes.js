@@ -3,6 +3,17 @@ const Event = require('../database/schemas/Event');
 const router = express.Router();
 
 
+router.post("/event", async (req, res) => {
+  try {
+    const event = new Event(req.body);
+    await event.save();
+    res.status(201).json({ message: "Event created successfully" });
+  } catch (error) {
+    console.error('Error creating event:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+})
+
 router.get('/event/:eventId', async (req, res) => {
   try {
     const { eventId } = req.params;

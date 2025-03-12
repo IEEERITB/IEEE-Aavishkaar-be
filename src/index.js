@@ -7,7 +7,8 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 // Middleware
-app.use(cors());
+app.use(cors({ origin: "*" }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // Ensure MONGO_URI is provided
