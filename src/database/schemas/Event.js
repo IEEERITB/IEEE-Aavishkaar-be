@@ -23,7 +23,8 @@ const eventSchema = new Schema({
     name: { type: String, required: true },
     contactNumber: { type: String, required: true }
   }],
-  eventFlow: { type: [String] }
+  eventFlow: { type: [String] },
+  organiser: { type: String }
 });
 
 module.exports = mongoose.model('Event', eventSchema);
