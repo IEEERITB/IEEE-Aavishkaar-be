@@ -21,6 +21,7 @@ const eventSchema = new Schema({
     ieeeMember: { type: Number, required: true },
   },
   rules: { type: [String], required: true },
+
   coordinators: [
     {
       name: { type: String, required: true },
@@ -29,6 +30,7 @@ const eventSchema = new Schema({
   ],
   eventFlow: { type: [String] },
   image: { type: String, required: true },
+
 });
 
 module.exports = mongoose.model("Event", eventSchema);

@@ -75,47 +75,6 @@ router.post("/sample-events", async (req, res) => {
   try {
     const sampleEvents = [
       {
-        name: "RoboWars",
-        description:
-          "Build and battle your robots in this exciting competition. Show off your engineering skills and compete for glory!",
-        timeline: {
-          dates: ["2025-03-15T10:00:00Z", "2025-03-15T18:00:00Z"],
-        },
-        venue: "Main Auditorium",
-        theme: "Robotics",
-        maxParticipantsPerTeam: 4,
-        prizes: [
-          { position: 1, amount: 10000 },
-          { position: 2, amount: 5000 },
-          { position: 3, amount: 2500 },
-        ],
-        registrationFees: {
-          standard: 500,
-          ieeeMember: 400,
-        },
-        rules: [
-          "Maximum team size: 4 members",
-          "Robot must be built from scratch",
-          "No pre-built kits allowed",
-          "Safety gear mandatory",
-          "Maximum robot weight: 15kg",
-        ],
-        coordinators: [
-          { name: "John Doe", contactNumber: "+91 98765 43210" },
-          { name: "Jane Smith", contactNumber: "+91 98765 43211" },
-        ],
-        eventFlow: [
-          "Registration and Check-in",
-          "Technical Inspection",
-          "Preliminary Rounds",
-          "Quarter Finals",
-          "Semi Finals",
-          "Finals",
-        ],
-        image:
-          "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=1000&auto=format&fit=crop",
-      },
-      {
         name: "CodeCraft",
         description:
           "A competitive programming contest that tests your problem-solving skills and coding efficiency. Solve complex algorithmic challenges and win exciting prizes!",
@@ -225,5 +184,6 @@ router.delete("/event/:eventId", async (req, res) => {
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 });
+
 
 module.exports = router;
