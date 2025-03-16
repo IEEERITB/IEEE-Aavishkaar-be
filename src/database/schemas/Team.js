@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const teamSchema = new mongoose.Schema({
   teamName: {
@@ -7,26 +7,26 @@ const teamSchema = new mongoose.Schema({
   },
   leader: {
     name: { type: String, required: true },
-    email: { type: String, required: true, },
+    email: { type: String, required: true },
     contactNumber: { type: String, required: true },
-    usn: { type: String, required: false, },
+    usn: { type: String, required: false },
   },
   members: [
     {
       name: { type: String, required: true },
-      usn: { type: String, required: false,  },
-    }
+      usn: { type: String, required: false },
+    },
   ],
-  
-  event:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:'Event',
-    required:true,
+
+  event: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Event",
+    required: true,
   },
   registeredAt: {
     type: Date,
     default: Date.now,
   },
 });
-const Team = mongoose.model('Team', teamSchema);
+const Team = mongoose.model("Team", teamSchema);
 module.exports = Team;
