@@ -83,7 +83,8 @@ router.get('/getFeaturedEvents', async (req, res) => {
       eventTimeline: event.timeline,
       eventTheme: event.theme,
       maxParticipantsPerTeam: event.maxParticipantsPerTeam,
-      registrationFees: event.registrationFees
+      registrationFees: event.registrationFees,
+      organiser:event.organiser
     }));
 
     res.json(featuredEventDetails);
