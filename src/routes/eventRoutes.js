@@ -24,6 +24,7 @@ router.get('/event/:eventId', async (req, res) => {
     }
 
     res.json({
+      eventId:event._id,
       eventName: event.name,
       eventDescription: event.description,
       eventTimeline: event.timeline,
