@@ -19,23 +19,26 @@ router.get('/event/:eventId', async (req, res) => {
     const { eventId } = req.params;
     const event = await Event.findById(eventId);
 
+    console.log(event)
+
     if (!event) {
       return res.status(404).json({ message: 'Event not found' });
     }
 
     res.json({
-      eventId:event._id,
-      eventName: event.name,
-      eventDescription: event.description,
-      eventTimeline: event.timeline,
-      eventVenue: event.venue,
-      eventTheme: event.theme,
-      maxParticipantsPerTeam: event.maxParticipantsPerTeam,
-      prizes: event.prizes,
-      registrationFees: event.registrationFees,
-      rules: event.rules,
-      coordinators: event.coordinators,
-      eventFlow: event.eventFlow
+      eventId: event._id || null,
+      eventName: event.name || null,
+      eventDescription: event.description || null,
+      eventTimeline: event.timeline || null,
+      eventVenue: event.venue || null,
+      eventTheme: event.theme || null,
+      maxParticipantsPerTeam: event.maxParticipantsPerTeam || null,
+      prizes: event.prizes || null,
+      registrationFees: event.registrationFees || null,
+      rules: event.rules || null,
+      coordinators: event.coordinators || null,
+      faqs: event.faqs || null,
+      date: event.date || null,
     });
   } catch (error) {
     console.error('Error fetching event by ID:', error);
@@ -54,13 +57,18 @@ router.get('/events', async (req, res) => {
       return res.json({ message: 'No events found' });
     }
 
+    console.log(events)
+
     const allEventDetails = events.map((event) => ({
       eventName: event.name,
       eventDescription: event.description,
       eventTimeline: event.timeline,
       eventTheme: event.theme,
       maxParticipantsPerTeam: event.maxParticipantsPerTeam,
-      registrationFees: event.registrationFees
+      registrationFees: event.registrationFees,
+      id: event._id,
+      organiser: event?.organiser ? event?.organiser : "",
+      date: event.date || null,
     }));
 
     res.json(allEventDetails);

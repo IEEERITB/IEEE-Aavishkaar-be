@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 const Event = require("./schemas/Event");
 const connectionOptions = {
-  dbName: process.env.NODE_ENV === "production" ? "aavishkar25" : "test",
+  dbName: process.env.NODE_ENV ="aavishkar25" ,
 };
 
 //The uri is the connection string that is used to connect to the MongoDB database.
