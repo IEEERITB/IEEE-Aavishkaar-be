@@ -39,6 +39,7 @@ router.get('/event/:eventId', async (req, res) => {
       coordinators: event.coordinators || null,
       faqs: event.faqs || null,
       date: event.date || null,
+      img: event.img || null
     });
   } catch (error) {
     console.error('Error fetching event by ID:', error);
@@ -69,6 +70,7 @@ router.get('/events', async (req, res) => {
       id: event._id,
       organiser: event?.organiser ? event?.organiser : "",
       date: event.date || null,
+      img: event.img || null
     }));
 
     res.json(allEventDetails);
@@ -93,7 +95,8 @@ router.get('/getFeaturedEvents', async (req, res) => {
       eventTheme: event.theme,
       maxParticipantsPerTeam: event.maxParticipantsPerTeam,
       registrationFees: event.registrationFees,
-      organiser:event.organiser
+      organiser:event.organiser,
+      img: event.img || null
     }));
 
     res.json(featuredEventDetails);

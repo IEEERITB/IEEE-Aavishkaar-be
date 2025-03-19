@@ -9,6 +9,7 @@ const eventSchema = new Schema({
     activity: { type: String, required: true },
     time: { type: String, required: true }
   }],
+  img: { type: String, required: true },
   venue: { type: String, required: true },
   theme: { type: String, required: true },
   maxParticipantsPerTeam: { type: Number, required: true },
