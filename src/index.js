@@ -4,7 +4,7 @@ const { connectDatabase } = require("./database/connect_mongo");
 require("dotenv-flow").config();
 
 const app = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8006;
 
 // Middleware
 app.use(cors({ origin: "*" }));

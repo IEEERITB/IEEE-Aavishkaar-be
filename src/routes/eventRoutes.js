@@ -51,7 +51,7 @@ router.get('/event/:eventId', async (req, res) => {
 //this returns only event details (for now)
 router.get('/events', async (req, res) => {
   try {
-    const limit = Number(req.query.limit) || 10;
+    const limit = Number(req.query.limit);
     const offset = Number(req.query.offset) || 0;
     const events = await Event.find().skip(offset).limit(limit);
       if (events.length === 0) {
