@@ -2,6 +2,7 @@ const express = require('express');
 const Team = require('../database/schemas/Team');
 const Event = require('../database/schemas/Event'); 
 const router = express.Router();
+const sendRegistrationEmail = require('../config/nodeMailerConfig');
 
 //team registration
 router.post('/register', async (req, res) => {
@@ -31,7 +32,7 @@ router.post('/register', async (req, res) => {
     });
 
     const savedTeam = await newTeam.save();
-
+    await sendRegistrationEmail(leader.email, eventExists.name, teamName, leader.name, members);
     // await Event.findByIdAndUpdate(
     //   event,
     //   { $push: { registeredTeams: savedTeam._id } }
