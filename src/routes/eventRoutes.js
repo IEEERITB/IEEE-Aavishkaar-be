@@ -89,6 +89,7 @@ router.get('/getFeaturedEvents', async (req, res) => {
     }
 
     const featuredEventDetails = featuredEvents.map((event) => ({
+      id: event._id,
       eventName: event.name,
       eventDescription: event.description,
       eventTimeline: event.timeline,
