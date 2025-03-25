@@ -14,10 +14,10 @@ const router = express.Router();
 //   }
 // })
 
-router.get('/event/:eventId', async (req, res) => {
+router.get('/event/:slug', async (req, res) => {
   try {
-    const { eventId } = req.params;
-    const event = await Event.findById(eventId);
+    const { slug } = req.params;
+    const event = await Event.findOne({slug:slug});
 
     // console.log(event)
 
@@ -43,7 +43,7 @@ router.get('/event/:eventId', async (req, res) => {
       img: event.img || null
     });
   } catch (error) {
-    console.error('Error fetching event by ID:', error);
+    console.error('Error fetching event details:', error);
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
 });
