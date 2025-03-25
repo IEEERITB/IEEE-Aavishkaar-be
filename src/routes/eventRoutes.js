@@ -82,7 +82,39 @@ router.get('/events', async (req, res) => {
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
 });
+router.get('/eventId/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const event = await Event.findById(id);
 
+    // console.log(event)
+
+    if (!event) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    res.json({
+      slug: event.slug,
+      eventId: event._id,
+      eventName: event.name,
+      eventDescription: event.description || null,
+      eventTimeline: event.timeline || null,
+      eventVenue: event.venue || null,
+      eventTheme: event.theme || null,
+      maxParticipantsPerTeam: event.maxParticipantsPerTeam || null,
+      prizes: event.prizes || null,
+      registrationFees: event.registrationFees || null,
+      rules: event.rules || null,
+      coordinators: event.coordinators || null,
+      faqs: event.faqs || null,
+      date: event.date || null,
+      img: event.img || null
+    });
+  } catch (error) {
+    console.error('Error fetching event details:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+});
 router.get('/getFeaturedEvents', async (req, res) => {
   try {
     const featuredEvents = await Event.find({ organiser: 'Student Branch (SB)' });
