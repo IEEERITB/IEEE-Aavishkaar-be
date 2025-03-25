@@ -3,31 +3,32 @@ const Event = require('../database/schemas/Event');
 const router = express.Router();
 
 
-router.post("/event", async (req, res) => {
-  try {
-    const event = new Event(req.body);
-    await event.save();
-    res.status(201).json({ message: "Event created successfully" });
-  } catch (error) {
-    console.error('Error creating event:', error);
-    res.status(500).json({ message: 'Server Error', error: error.message });
-  }
-})
+// router.post("/event", async (req, res) => {
+//   try {
+//     const event = new Event(req.body);
+//     await event.save();
+//     res.status(201).json({ message: "Event created successfully" });
+//   } catch (error) {
+//     console.error('Error creating event:', error);
+//     res.status(500).json({ message: 'Server Error', error: error.message });
+//   }
+// })
 
-router.get('/event/:eventId', async (req, res) => {
+router.get('/event/:slug', async (req, res) => {
   try {
-    const { eventId } = req.params;
-    const event = await Event.findById(eventId);
+    const { slug } = req.params;
+    const event = await Event.findOne({slug:slug});
 
-    console.log(event)
-    
+    // console.log(event)
+
     if (!event) {
       return res.status(404).json({ message: 'Event not found' });
     }
 
     res.json({
-      eventId: event._id || null,
-      eventName: event.name || null,
+      slug: event.slug,
+      eventId: event._id,
+      eventName: event.name,
       eventDescription: event.description || null,
       eventTimeline: event.timeline || null,
       eventVenue: event.venue || null,
@@ -42,7 +43,7 @@ router.get('/event/:eventId', async (req, res) => {
       img: event.img || null
     });
   } catch (error) {
-    console.error('Error fetching event by ID:', error);
+    console.error('Error fetching event details:', error);
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
 });
@@ -58,9 +59,10 @@ router.get('/events', async (req, res) => {
       return res.json({ message: 'No events found' });
     }
 
-    console.log(events)
+    // console.log(events)
 
     const allEventDetails = events.map((event) => ({
+      slug: event.slug,
       eventName: event.name,
       eventDescription: event.description,
       eventTimeline: event.timeline,
@@ -83,13 +85,15 @@ router.get('/events', async (req, res) => {
 
 router.get('/getFeaturedEvents', async (req, res) => {
   try {
-    const featuredEvents = await Event.find({ organiser: 'SB' });
+    const featuredEvents = await Event.find({ organiser: 'Student Branch (SB)' });
 
     if (featuredEvents.length === 0) {
       return res.status(404).json({ message: 'No featured events found' });
     }
 
     const featuredEventDetails = featuredEvents.map((event) => ({
+      id: event._id,
+      slug: event.slug,
       eventName: event.name,
       eventDescription: event.description,
       eventTimeline: event.timeline,
