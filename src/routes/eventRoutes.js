@@ -67,7 +67,6 @@ router.get('/events', async (req, res) => {
       eventDescription: event.description,
       eventTimeline: event.timeline,
       eventTheme: event.theme,
-      eventVenue:event.venue,
       maxParticipantsPerTeam: event.maxParticipantsPerTeam,
       registrationFees: event.registrationFees,
       id: event._id,
