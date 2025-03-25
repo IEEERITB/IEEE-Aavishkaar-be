@@ -3,6 +3,7 @@ const Event = require('../database/schemas/Event');
 const router = express.Router();
 
 
+
 router.post("/event", async (req, res) => {
   try {
     const event = new Event(req.body);
@@ -14,38 +15,7 @@ router.post("/event", async (req, res) => {
   }
 })
 
-router.get('/event/:eventId', async (req, res) => {
-  try {
-    const { eventId } = req.params;
-    const event = await Event.findById(eventId);
 
-    console.log(event)
-
-    if (!event) {
-      return res.status(404).json({ message: 'Event not found' });
-    }
-
-    res.json({
-      eventId: event._id || null,
-      eventName: event.name || null,
-      eventDescription: event.description || null,
-      eventTimeline: event.timeline || null,
-      eventVenue: event.venue || null,
-      eventTheme: event.theme || null,
-      maxParticipantsPerTeam: event.maxParticipantsPerTeam || null,
-      prizes: event.prizes || null,
-      registrationFees: event.registrationFees || null,
-      rules: event.rules || null,
-      coordinators: event.coordinators || null,
-      faqs: event.faqs || null,
-      date: event.date || null,
-      img: event.img || null
-    });
-  } catch (error) {
-    console.error('Error fetching event by ID:', error);
-    res.status(500).json({ message: 'Server Error', error: error.message });
-  }
-});
 
 
 //this returns only event details (for now)
@@ -80,7 +50,39 @@ router.get('/events', async (req, res) => {
     res.status(500).json({ message: 'Server Error', error: error.message });
   }
 });
+router.get('/event/:eventId', async (req, res) => {
+  try {
+    const { eventId } = req.params;
+    console.log(eventId);
+    const event = await Event.findById(eventId);
 
+    console.log(event);
+
+    if (!event) {
+      return res.status(404).json({ message: 'Event not found' });
+    }
+
+    res.json({
+      eventId: event._id || null,
+      eventName: event.name || null,
+      eventDescription: event.description || null,
+      eventTimeline: event.timeline || null,
+      eventVenue: event.venue || null,
+      eventTheme: event.theme || null,
+      maxParticipantsPerTeam: event.maxParticipantsPerTeam || null,
+      prizes: event.prizes || null,
+      registrationFees: event.registrationFees || null,
+      rules: event.rules || null,
+      coordinators: event.coordinators || null,
+      faqs: event.faqs || null,
+      date: event.date || null,
+      img: event.img || null
+    });
+  } catch (error) {
+    console.error('Error fetching event by ID:', error);
+    res.status(500).json({ message: 'Server Error', error: error.message });
+  }
+});
 router.get('/getFeaturedEvents', async (req, res) => {
   try {
     const featuredEvents = await Event.find({ organiser: 'SB' });
