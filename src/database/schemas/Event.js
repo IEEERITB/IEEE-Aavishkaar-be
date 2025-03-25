@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const eventSchema = new Schema({
+  slug: { type: String, required: true },
   name: { type: String, required: true },
   description: { type: String, required: true },
   date: { type: String, required: true },

@@ -19,15 +19,16 @@ router.get('/event/:eventId', async (req, res) => {
     const { eventId } = req.params;
     const event = await Event.findById(eventId);
 
-    console.log(event)
+    // console.log(event)
 
     if (!event) {
       return res.status(404).json({ message: 'Event not found' });
     }
 
     res.json({
-      eventId: event._id || null,
-      eventName: event.name || null,
+      slug: event.slug,
+      eventId: event._id,
+      eventName: event.name,
       eventDescription: event.description || null,
       eventTimeline: event.timeline || null,
       eventVenue: event.venue || null,
@@ -58,9 +59,10 @@ router.get('/events', async (req, res) => {
       return res.json({ message: 'No events found' });
     }
 
-    console.log(events)
+    // console.log(events)
 
     const allEventDetails = events.map((event) => ({
+      slug: event.slug,
       eventName: event.name,
       eventDescription: event.description,
       eventTimeline: event.timeline,
@@ -90,6 +92,7 @@ router.get('/getFeaturedEvents', async (req, res) => {
 
     const featuredEventDetails = featuredEvents.map((event) => ({
       id: event._id,
+      slug: event.slug,
       eventName: event.name,
       eventDescription: event.description,
       eventTimeline: event.timeline,
